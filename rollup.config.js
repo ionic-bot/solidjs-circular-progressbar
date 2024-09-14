@@ -1,11 +1,10 @@
+import withSolid from "rollup-preset-solid";
 import typescript from 'rollup-plugin-typescript2';
+import pkg from './package.json' assert { type: 'json' };
 
-import pkg from './package.json';
-
-export default [
+export default withSolid([
   {
     input: 'src/index.ts',
-    external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
     output: [
       {
         file: pkg.main,
@@ -20,8 +19,9 @@ export default [
     ],
     plugins: [
       typescript({
-        typescript: require('typescript'),
+        tsconfig: 'tsconfig.json',
+        useTsconfigDeclarationDir: true
       }),
     ],
   },
-];
+]);

@@ -1,10 +1,12 @@
-import * as React from 'react';
+// @ts-ignore
+import * as SolidJS from 'solid-js';
 
 import CircularProgressbar from './CircularProgressbar';
 import { CircularProgressbarWrapperProps } from './types';
+import { JSX } from 'solid-js/jsx-runtime';
 
 type CircularProgressbarWithChildrenProps = CircularProgressbarWrapperProps & {
-  children?: React.ReactNode;
+  children?: JSX.Element;
 };
 
 // This is a wrapper around CircularProgressbar that allows passing children,
@@ -31,11 +33,11 @@ function CircularProgressbarWithChildren(props: CircularProgressbarWithChildrenP
               position: 'absolute',
               width: '100%',
               height: '100%',
-              marginTop: '-100%',
+              'margin-top': '-100%',
               display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
+              'flex-direction': 'column',
+              'justify-content': 'center',
+              'align-items': 'center',
             }}
           >
             {props.children}

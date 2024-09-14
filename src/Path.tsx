@@ -1,4 +1,6 @@
-import * as React from 'react';
+// @ts-ignore
+import * as SolidJS from 'solid-js';
+
 import { VIEWBOX_CENTER_X, VIEWBOX_CENTER_Y } from './constants';
 
 function Path({
@@ -18,14 +20,14 @@ function Path({
 }) {
   return (
     <path
-      className={className}
+      class={className}
       style={Object.assign({}, style, getDashStyle({ pathRadius, dashRatio, counterClockwise }))}
       d={getPathDescription({
         pathRadius,
         counterClockwise,
       })}
-      strokeWidth={strokeWidth}
-      fillOpacity={0}
+      stroke-width={strokeWidth}
+      fill-opacity={0}
     />
   );
 }
@@ -67,9 +69,9 @@ function getDashStyle({
 
   return {
     // Have dash be full diameter, and gap be full diameter
-    strokeDasharray: `${diameter}px ${diameter}px`,
+    'stroke-dasharray': `${diameter}px ${diameter}px`,
     // Shift dash backward by gapLength, so gap starts appearing at correct distance
-    strokeDashoffset: `${counterClockwise ? -gapLength : gapLength}px`,
+    'stroke-dashoffset': `${counterClockwise ? -gapLength : gapLength}px`,
   };
 }
 

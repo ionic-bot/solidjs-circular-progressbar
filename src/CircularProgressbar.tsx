@@ -1,4 +1,5 @@
-import * as React from 'react';
+// @ts-ignore
+import * as SolidJS from 'solid-js';
 
 import {
   VIEWBOX_WIDTH,
@@ -8,10 +9,11 @@ import {
   VIEWBOX_CENTER_Y,
 } from './constants';
 import Path from './Path';
-import { CircularProgressbarDefaultProps, CircularProgressbarProps } from './types';
+import { CircularProgressbarDefaultProps, CircularProgressbarWrapperProps } from './types';
+import { mergeProps } from 'solid-js';
 
-class CircularProgressbar extends React.Component<CircularProgressbarProps> {
-  static defaultProps: CircularProgressbarDefaultProps = {
+function CircularProgressbar(passedProps: CircularProgressbarWrapperProps) {
+  const defaultProps: CircularProgressbarDefaultProps = {
     background: false,
     backgroundPadding: 0,
     circleRatio: 1,
@@ -37,89 +39,88 @@ class CircularProgressbar extends React.Component<CircularProgressbarProps> {
     text: '',
   };
 
-  getBackgroundPadding() {
-    if (!this.props.background) {
+  const props = mergeProps(defaultProps, passedProps);
+
+  function getBackgroundPadding() {
+    if (!props.background) {
       // Don't add padding if not displaying background
       return 0;
     }
-    return this.props.backgroundPadding;
+    return props.backgroundPadding;
   }
 
-  getPathRadius() {
+  function getPathRadius() {
     // The radius of the path is defined to be in the middle, so in order for the path to
     // fit perfectly inside the 100x100 viewBox, need to subtract half the strokeWidth
-    return VIEWBOX_HEIGHT_HALF - this.props.strokeWidth / 2 - this.getBackgroundPadding();
+    return VIEWBOX_HEIGHT_HALF - props.strokeWidth / 2 - getBackgroundPadding();
   }
 
   // Ratio of path length to trail length, as a value between 0 and 1
-  getPathRatio() {
-    const { value, minValue, maxValue } = this.props;
+  function getPathRatio() {
+    const { value, minValue, maxValue } = props;
     const boundedValue = Math.min(Math.max(value, minValue), maxValue);
     return (boundedValue - minValue) / (maxValue - minValue);
   }
+  const {
+    circleRatio,
+    className,
+    classes,
+    counterClockwise,
+    styles,
+    strokeWidth,
+    text,
+  } = props;
 
-  render() {
-    const {
-      circleRatio,
-      className,
-      classes,
-      counterClockwise,
-      styles,
-      strokeWidth,
-      text,
-    } = this.props;
+  const pathRadius = getPathRadius();
+  const pathRatio = getPathRatio();
 
-    const pathRadius = this.getPathRadius();
-    const pathRatio = this.getPathRatio();
-
-    return (
-      <svg
-        className={`${classes.root} ${className}`}
-        style={styles.root}
-        viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
-        data-test-id="CircularProgressbar"
-      >
-        {this.props.background ? (
-          <circle
-            className={classes.background}
-            style={styles.background}
-            cx={VIEWBOX_CENTER_X}
-            cy={VIEWBOX_CENTER_Y}
-            r={VIEWBOX_HEIGHT_HALF}
-          />
-        ) : null}
-
-        <Path
-          className={classes.trail}
-          counterClockwise={counterClockwise}
-          dashRatio={circleRatio}
-          pathRadius={pathRadius}
-          strokeWidth={strokeWidth}
-          style={styles.trail}
+  return (
+    <svg
+      class={`${classes.root} ${className}`}
+      style={styles.root}
+      viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
+      data-test-id="CircularProgressbar"
+    >
+      {props.background ? (
+        <circle
+          class={classes.background}
+          style={styles.background}
+          cx={VIEWBOX_CENTER_X}
+          cy={VIEWBOX_CENTER_Y}
+          r={VIEWBOX_HEIGHT_HALF}
         />
+      ) : null}
 
-        <Path
-          className={classes.path}
-          counterClockwise={counterClockwise}
-          dashRatio={pathRatio * circleRatio}
-          pathRadius={pathRadius}
-          strokeWidth={strokeWidth}
-          style={styles.path}
-        />
+      <Path
+        className={classes.trail}
+        counterClockwise={counterClockwise}
+        dashRatio={circleRatio}
+        pathRadius={pathRadius}
+        strokeWidth={strokeWidth}
+        style={styles.trail}
+      />
 
-        {text ? (
-          <text
-            className={classes.text}
-            style={styles.text}
-            x={VIEWBOX_CENTER_X}
-            y={VIEWBOX_CENTER_Y}
-          >
-            {text}
-          </text>
-        ) : null}
-      </svg>
-    );
-  }
+      <Path
+        className={classes.path}
+        counterClockwise={counterClockwise}
+        dashRatio={pathRatio * circleRatio}
+        pathRadius={pathRadius}
+        strokeWidth={strokeWidth}
+        style={styles.path}
+      />
+
+      {text ? (
+        <text
+          class={classes.text}
+          style={styles.text}
+          x={VIEWBOX_CENTER_X}
+          y={VIEWBOX_CENTER_Y}
+        >
+          {text}
+        </text>
+      ) : null}
+    </svg>
+  );
 }
 
 export default CircularProgressbar;

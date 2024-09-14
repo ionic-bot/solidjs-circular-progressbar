@@ -1,11 +1,11 @@
-import * as React from 'react';
+import { JSX } from "solid-js/jsx-runtime";
 
 export type CircularProgressbarStyles = {
-  root?: React.CSSProperties;
-  trail?: React.CSSProperties;
-  path?: React.CSSProperties;
-  text?: React.CSSProperties;
-  background?: React.CSSProperties;
+  root?: JSX.CSSProperties;
+  trail?: JSX.CSSProperties;
+  path?: JSX.CSSProperties;
+  text?: JSX.CSSProperties;
+  background?: JSX.CSSProperties;
 };
 
 export type CircularProgressbarDefaultProps = {
